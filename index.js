@@ -20,6 +20,7 @@ const action = async () => {
     if (!serviceState) {
       core.setFailed(`service state not found for ${serviceName}`);
     }
+    core.setOutput('version', serviceState.version);
   } catch (error) {
     core.setFailed(error);
   }
