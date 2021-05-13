@@ -1,0 +1,20 @@
+name: Get environment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  updateEnvironment:
+    name: Get environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create release
+        id: release
+        uses: codfish/semantic-release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,15 @@
+name: Get environment
+description: Action to get the version of the environment
+inputs:
+  ci-token:
+    description: CI Github token
+    required: true
+  environment:
+    description: Name of the environment
+    required: true
+  service-name:
+    description: Name of the service
+    required: true
+runs:
+  using: node12
+  main: index.js
