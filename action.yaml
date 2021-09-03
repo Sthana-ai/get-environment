@@ -10,6 +10,9 @@ inputs:
   service-name:
     description: Name of the service
     required: true
+  sidecar-service-name:
+    description: Name of the sidecar service
+    required: false
 runs:
   using: node12
   main: index.js

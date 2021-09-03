@@ -6,6 +6,7 @@ const action = async () => {
     const environment = core.getInput('environment', { required: true });
     const ciToken = core.getInput('ci-token', { required: true });
     const serviceName = core.getInput('service-name', { required: true });
+    const sidecarServiceName = core.getInput('sidecar-service-name', { required: false });
 
     const octokit = github.getOctokit(ciToken);
 
@@ -16,12 +17,19 @@ const action = async () => {
       ref: 'refs/heads/master',
     });
     const serviceStates = JSON.parse(Buffer.from(serviceStatesRes.data.content, 'base64').toString());
-    const serviceState = serviceStates.find((state) => state.name === serviceName);
+    let serviceState = serviceStates.find((state) => state.name === serviceName);
     if (!serviceState) {
-      core.setFailed(`service state not found for ${serviceName}`);
+      core.setFailed(`service state not found for service with name ${serviceName}`);
     }
 
-    core.info(`version of ${serviceState.name} deployed in ${environment} is ${serviceState.version}`);
+    if (sidecarServiceName) {
+      serviceState = serviceStates.sidecars.find((state) => state.name === sidecarServiceName);
+      if (!serviceState) {
+        core.setFailed(`service state not found for sidecar with name ${sidecarServiceName}`);
+      }
+    }
+
+    core.info(`version of ${sidecarServiceName ? `${sidecarServiceName}(sidecar of ${serviceName})` : serviceName} deployed in ${environment} is ${serviceState.version}`);
     core.setOutput('version', serviceState.version);
   } catch (error) {
     core.setFailed(error);
