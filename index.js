@@ -23,7 +23,7 @@ const action = async () => {
     }
 
     if (sidecarServiceName) {
-      serviceState = serviceStates.sidecars.find((state) => state.name === sidecarServiceName);
+      serviceState = serviceState.sidecars.find((state) => state.name === sidecarServiceName);
       if (!serviceState) {
         core.setFailed(`service state not found for sidecar with name ${sidecarServiceName}`);
       }
